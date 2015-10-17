@@ -51,7 +51,11 @@ func randNumbers(n int) <-chan int {
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Printf("\nTotal number: %d\n=================\n\n", *total)
+	url := "https://github.com/yookoala/lottery"
+	fmt.Printf("\nSource code: %s\n\nTotal number: %d\n"+
+		"=================\n\n",
+		url, *total)
+
 	for n := range uniqueInt(randNumbers(*total)) {
 		t := time.Now().Format("15:04:05.999")
 		t += strings.Repeat("0", 12-len(t))
