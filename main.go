@@ -6,14 +6,19 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 )
 
 // total number of available person in the lottery
-var total = flag.Int("total", 1000, "Total number of people in the lottery")
+var total = flag.Int("total", 0, "Total number of people in the lottery")
 
 func init() {
 	flag.Parse()
+	if *total <= 0 {
+		fmt.Print("Usage: lottery -total [NUMBER]\n\n")
+		os.Exit(1)
+	}
 }
 
 func uniqueInt(in <-chan int) <-chan int {
@@ -46,8 +51,11 @@ func randNumbers(n int) <-chan int {
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
+	fmt.Printf("\nTotal number: %d\n=================\n\n", *total)
 	for n := range uniqueInt(randNumbers(*total)) {
-		fmt.Printf("%d", n)
+		t := time.Now().Format("15:04:05.999")
+		t += strings.Repeat("0", 12-len(t))
+		fmt.Printf("[%s] %d", t, n)
 		reader.ReadString('\n')
 	}
 }
