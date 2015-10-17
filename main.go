@@ -10,13 +10,14 @@ import (
 	"time"
 )
 
-// total number of available person in the lottery
-var total = flag.Int("total", 0, "Total number of people in the lottery")
+// min and max random number of the lottery
+var max = flag.Int("max", 0, "Max random number in the lottery")
+var min = flag.Int("min", 1, "Min random number in the lottery")
 
 func init() {
 	flag.Parse()
-	if *total <= 0 {
-		fmt.Print("Usage: lottery -total [NUMBER]\n\n")
+	if *max <= 0 {
+		fmt.Print("Usage: lottery -max <NUMBER> [-min <NUMBER>]\n\n")
 		os.Exit(1)
 	}
 }
@@ -38,12 +39,13 @@ func uniqueInt(in <-chan int) <-chan int {
 	return out
 }
 
-func randNumbers(n int) <-chan int {
+func randNumbers(min, max int) <-chan int {
 	rand.Seed(time.Now().Unix())
 	out := make(chan int)
+	n := max - min + 1
 	go func() {
 		for {
-			out <- rand.Intn(n) + 1
+			out <- rand.Intn(n) + min
 		}
 	}()
 	return out
@@ -52,11 +54,14 @@ func randNumbers(n int) <-chan int {
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	url := "https://github.com/yookoala/lottery"
-	fmt.Printf("\nSource code: %s\n\nTotal number: %d\n"+
-		"=================\n\n",
-		url, *total)
+	fmt.Printf("\nSource code: %s\n\n", url)
+	fmt.Printf("Max: %d\n", *max)
+	if *min != 1 {
+		fmt.Printf("Min: %d\n", *min)
+	}
+	fmt.Printf("=================\n\n")
 
-	for n := range uniqueInt(randNumbers(*total)) {
+	for n := range uniqueInt(randNumbers(*min, *max)) {
 		t := time.Now().Format("15:04:05.999")
 		t += strings.Repeat("0", 12-len(t))
 		fmt.Printf("[%s] %d", t, n)
