@@ -10,7 +10,17 @@ Max number is required. Min number is by default 1.
 Usage
 -----
 
+The command line tool support 2 lottery mode.
+
+You can use it to generate random number from `min` to `max`:
+
     lottery -max <NUMBER> [-min <NUMBER>]
+
+or you may read random row from a provided excel file (.xlsx).
+In which case, the random number generated will be specifying the
+row number in the file. The first 2 cell in the row will be displayed:
+
+    lottery -file <.XLSX FILENAME> [-max <NUMBER>] [-min <NUMBER>]
 
 
 Installation
