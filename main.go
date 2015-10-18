@@ -10,8 +10,6 @@ import (
 	"time"
 
 	"github.com/yookoala/lottery/reader"
-
-	"log"
 )
 
 // min and max random number of the lottery
@@ -128,9 +126,7 @@ func main() {
 	url := "https://github.com/yookoala/lottery"
 	fmt.Printf("\nSource code: %s\n\n", url)
 	fmt.Printf("Max: %d\n", *max)
-	if *min != 1 {
-		fmt.Printf("Min: %d\n", *min)
-	}
+	fmt.Printf("Min: %d\n", *min)
 	fmt.Printf("=================\n\n")
 
 	reader := bufio.NewReader(os.Stdin)
